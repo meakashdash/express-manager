@@ -1,0 +1,26 @@
+{
+  "name": "express-manager",
+  "version": "1.0.0",
+  "description": "An CLI based tool to generate express controller, model and router for you.",
+  "type": "module",
+  "main": "index.ts",
+  "bin": {
+    "express-manager": "./dist/index.js"
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "inquirer": "^9.3.4"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7"
+  }
+}
