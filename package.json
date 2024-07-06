@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "An CLI based tool to generate express controller, model and router for you.",
   "type": "module",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "bin": {
     "express-manager": "./dist/index.js"
   },
@@ -16,11 +16,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "boxen": "^7.1.1",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
-    "inquirer": "^9.3.4"
+    "figlet": "^1.7.0",
+    "inquirer": "^9.3.4",
+    "ora": "^8.0.1",
+    "string-width": "^7.2.0"
   },
   "devDependencies": {
+    "@types/figlet": "^1.5.8",
     "@types/inquirer": "^9.0.7"
   }
 }
