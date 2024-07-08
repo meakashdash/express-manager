@@ -1,6 +1,6 @@
 {
   "name": "express-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An CLI based tool to generate express controller, model and router for you.",
   "type": "module",
   "main": "dist/index.js",
