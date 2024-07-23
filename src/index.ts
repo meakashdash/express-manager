@@ -13,7 +13,7 @@ import { generateRouterTemplate } from "./generateRouterTemplate.js";
 
 const configFile = path.join(process.cwd(), "express-manager-config.json");
 
-let config: { language?: string } = {};
+let config: { language?: string,organizationMode?:string } = {};
 
 if (fs.existsSync(configFile)) {
   config = JSON.parse(fs.readFileSync(configFile, "utf-8"));
@@ -46,12 +46,11 @@ function displayBanner() {
 
 async function languageSelect() {
   if (!config.language) {
-    displayBanner();
     const answer = await inquirer.prompt([
       {
         type: "list",
         name: "language",
-        message: "Select Language:",
+        message: chalk.gray("Select Language:"),
         choices: [
           { name: chalk.yellow("Javascript"), value: "js" },
           { name: chalk.blue("TypeScript"), value: "ts" },
@@ -60,6 +59,25 @@ async function languageSelect() {
     ]);
 
     config.language = answer.language;
+    fs.writeFileSync(configFile, JSON.stringify(config, null, 2));
+  }
+}
+
+async function selectOrganizationMode(){
+  if(!config.organizationMode){
+    displayBanner();
+    const ans=await inquirer.prompt([
+      {
+        type:'list',
+        name:'organizationMode',
+        message:chalk.gray('Select Organization Mode'),
+        choices:[
+          {name:chalk.magenta("By module (group related files together)"),value:"byModule"},
+          {name:chalk.cyan("By type (separate folders for models, controllers, routers)"), value:"byType"}
+        ]
+      }
+    ])
+    config.organizationMode=ans.organizationMode;
     fs.writeFileSync(configFile, JSON.stringify(config, null, 2));
   }
 }
@@ -74,6 +92,7 @@ program
   .command("generate <type> <name>")
   .description("Generate a model, controller, or router")
   .action(async (type, name) => {
+    await selectOrganizationMode();
     await languageSelect();
     if (
       type !== "module" &&
@@ -93,13 +112,25 @@ program
   });
 
 async function generateFile(name: string, type: string) {
-  const folderPath = path.join(process.cwd(), name);
+  let folderPath:string;
+  let fileName:string;
+  let relativePath:string;
+  if(config.organizationMode==="byType"){
+    folderPath=path.join(process.cwd(),type+"s")
+    fileName=`${name}.${type}.${config.language}`;
+    relativePath=path.join(type + "s", fileName);
+  }else if(config.organizationMode==="byModule"){
+    folderPath=path.join(process.cwd(), name);
+    fileName = `${name}.${type}.${config.language}`;
+    relativePath = path.join(name, fileName);
+  }else{
+    chalk.red('❌ Invalid Organization Mode.')
+    return
+  }
   if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath);
   }
-  const fileName = `${name}.${type}.${config.language}`;
   const filePath = path.join(folderPath, fileName);
-  const relativePath = path.join(name, fileName);
   if (!fs.existsSync(filePath)) {
     const spinner = ora(`Creating ${type} ${name}...`).start();
     await new Promise(resolve => setTimeout(resolve, 1000));
