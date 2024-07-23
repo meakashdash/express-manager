@@ -26,8 +26,8 @@ To use Express Manager, run the following command:
 express-manager generate <type> <name>
 ```
 
-- **<type>**: The type of file to generate. This can be model, controller, router, or module.
-- **<name>**: The name of the file to generate.
+- *type*: The type of file to generate. This can be model, controller, router, or module.
+- *name*: The name of the file to generate.
 
 # Examples
 
@@ -72,8 +72,9 @@ When you run the tool for the first time, you will be prompted to select a langu
 
 # Example Directory Structure
 
-After generating a user module, your directory structure will look like this:
+After generating files, your directory structure will look like one of these, depending on your chosen organization mode:
 
+- By Module: Groups related files (model, controller, router) for each module in its own directory.
 ```sh
 
 project-directory/
@@ -87,7 +88,27 @@ project-directory/
 │
 └── ...
 ```
+- By Type:  Separates files into directories based on their type (models, controllers, routers).
 
+```sh
+project-directory/
+│
+├── models/
+│   ├── user.model.js
+│   └── product.model.js
+│
+├── controllers/
+│   ├── user.controller.js
+│   └── product.controller.js
+│
+├── routers/
+│   ├── user.router.js
+│   └── product.router.js
+│
+├── express-manager-config.json
+│
+└── ...
+```
 # License
 
 This project is licensed under the ISC License. See the LICENSE file for details.
